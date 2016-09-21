@@ -20,3 +20,9 @@
 02.TranslateABTest/test_table.csv
 
 .idea/workspace.xml
+
+04.FraudActivity/Fraud_Data.csv
+
+04.FraudActivity/IpAddress_to_Country.csv
+
+04.FraudActivity/fraud_cleaned.csv
