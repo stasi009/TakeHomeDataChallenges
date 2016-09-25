@@ -26,3 +26,7 @@
 04.FraudActivity/IpAddress_to_Country.csv
 
 04.FraudActivity/fraud_cleaned.csv
+
+06.PriceTest/user_table.csv
+
+06.PriceTest/test_results.csv
