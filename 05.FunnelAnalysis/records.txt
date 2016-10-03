@@ -1,0 +1,12 @@
+
+90400 users on home
+45200 users on search
+home ==> search, 50.00% left, 50.00% dropped
+
+45200 users on search
+6030 users on payment
+search ==> payment, 13.34% left, 86.66% dropped
+
+6030 users on payment
+452 users on confirm
+payment ==> confirm, 7.50% left, 92.50% dropped

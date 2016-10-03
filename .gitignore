@@ -32,3 +32,15 @@
 06.PriceTest/user_table.csv
 
 06.PriceTest/test_results.csv
+
+05.FunnelAnalysis/user_table.csv
+
+05.FunnelAnalysis/all_users.csv
+
+05.FunnelAnalysis/home_page_table.csv
+
+05.FunnelAnalysis/payment_confirmation_table.csv
+
+05.FunnelAnalysis/payment_page_table.csv
+
+05.FunnelAnalysis/search_page_table.csv
