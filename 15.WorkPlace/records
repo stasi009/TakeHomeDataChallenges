@@ -1,0 +1,73 @@
+
+         rf_test   lrg_test   rdg_test
+mabse  55.749298  55.705776  56.192671
+r2      0.330896   0.336225   0.333807
+rmse   71.362791  71.078021  71.207370
+
+
+mabse    55.689528
+r2        0.335439
+rmse     71.120070
+dtype: float64
+
+
+
+
+training finished, best alpha=0.001
+************** Feature Importance **************
+                      coef  importance
+dept_engineering  0.322856    0.322856
+dept_sales        0.097247    0.097247
+dept_marketing    0.093304    0.093304
+degree            0.003350    0.003350
+yrs_experience    0.000842    0.000842
+is_male           0.000282    0.000282
+signing_bonus    -0.014276    0.014276
+dept_HR          -0.706904    0.706904
+************** Accuracy on test set **************
+mabse    0.306176
+r2       0.431489
+rmse     0.385843
+Name: low, dtype: float64
+training finished, best alpha=0.1
+************** Feature Importance **************
+                      coef  importance
+dept_engineering  0.266360    0.266360
+dept_sales        0.072647    0.072647
+dept_marketing    0.052231    0.052231
+level             0.048150    0.048150
+signing_bonus     0.024547    0.024547
+yrs_experience    0.005700    0.005700
+n_subordinates    0.000770    0.000770
+degree           -0.002029    0.002029
+is_male          -0.052176    0.052176
+dept_HR          -0.518071    0.518071
+************** Accuracy on test set **************
+mabse    0.339143
+r2       0.342952
+rmse     0.417985
+
+********************************************** low
+                      coef  importance
+dept_HR          -0.706904    0.706904
+dept_engineering  0.322856    0.322856
+dept_sales        0.097247    0.097247
+dept_marketing    0.093304    0.093304
+signing_bonus    -0.014276    0.014276
+degree            0.003350    0.003350
+yrs_experience    0.000842    0.000842
+is_male           0.000282    0.000282
+
+
+Out[46]: ************************************** middle
+                      coef  importance
+dept_HR          -0.518071    0.518071
+dept_engineering  0.266360    0.266360
+dept_sales        0.072647    0.072647
+dept_marketing    0.052231    0.052231
+is_male          -0.052176    0.052176
+level             0.048150    0.048150
+signing_bonus     0.024547    0.024547
+yrs_experience    0.005700    0.005700
+degree           -0.002029    0.002029
+n_subordinates    0.000770    0.000770
