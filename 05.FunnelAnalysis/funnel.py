@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 plt.style.use("ggplot")
 from sklearn.tree import DecisionTreeClassifier,export_graphviz
+from sklearn.feature_selection import chi2,f_classif
 
 def load_user_pages(allusers,filename):
     if allusers is None:
@@ -113,6 +114,18 @@ feat_names = ["from_mobile","is_male"]
 dt = DecisionTreeClassifier(max_depth=2)
 dt.fit(D.loc[:,feat_names],D.loc[:,'converted'])
 export_graphviz(dt,out_file="tree.dot",feature_names=feat_names,class_names=["NotConvert","Convert"])
+
+##################### check time's importances
+D["weekday"] = allusers.date.dt.weekday
+D["month"] = allusers.date.dt.month
+
+feat_names = ["from_mobile","is_male","weekday",'month']
+chi2(D.loc[:,feat_names],D.converted)
+f_classif(D.loc[:,feat_names],D.converted)
+
+### group by month
+D.groupby(by="month")["converted"].agg(['count','mean'])
+D.groupby(by="weekday")["converted"].agg(['count','mean'])
 
 
 
