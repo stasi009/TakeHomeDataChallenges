@@ -60,3 +60,11 @@
 16.ParseURL/urls.csv
 
 16.ParseURL/url_list.txt
+
+13.CitySimilarity/city_search.json
+
+13.CitySimilarity/city_similarity.csv
+
+13.CitySimilarity/clean_sessions.csv
+
+13.CitySimilarity/temp.csv
