@@ -76,3 +76,13 @@
 10.CreditCard/cc_info.csv
 
 10.CreditCard/transactions.csv
+
+12.LoanGrant/borrower_table.csv
+
+12.LoanGrant/cleaned_loan.csv
+
+12.LoanGrant/loan_all.csv
+
+12.LoanGrant/.ipynb_checkpoints/loan_grant-checkpoint.ipynb
+
+12.LoanGrant/loan_table.csv
