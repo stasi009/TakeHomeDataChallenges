@@ -1,0 +1,37 @@
+digraph Tree {
+node [shape=box, style="filled", color="black"] ;
+graph [ranksep=equally, splines=polyline] ;
+0 [label="length <= 784.5\ngini = 0.2946\nsamples = 100.0%\nvalue = [0.82, 0.18]\nclass = NotHot", fillcolor="#e58139c7"] ;
+1 [label="length <= 398.5\ngini = 0.373\nsamples = 62.4%\nvalue = [0.75, 0.25]\nclass = NotHot", fillcolor="#e58139ab"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="w_Thursday <= 0.5\ngini = 0.4296\nsamples = 28.0%\nvalue = [0.69, 0.31]\nclass = NotHot", fillcolor="#e581398b"] ;
+1 -> 2 ;
+3 [label="gini = 0.4489\nsamples = 23.0%\nvalue = [0.66, 0.34]\nclass = NotHot", fillcolor="#e581397c"] ;
+2 -> 3 ;
+4 [label="gini = 0.3024\nsamples = 5.0%\nvalue = [0.81, 0.19]\nclass = NotHot", fillcolor="#e58139c5"] ;
+2 -> 4 ;
+5 [label="w_Monday <= 0.5\ngini = 0.3144\nsamples = 34.4%\nvalue = [0.8, 0.2]\nclass = NotHot", fillcolor="#e58139c1"] ;
+1 -> 5 ;
+6 [label="gini = 0.2957\nsamples = 30.4%\nvalue = [0.82, 0.18]\nclass = NotHot", fillcolor="#e58139c7"] ;
+5 -> 6 ;
+7 [label="gini = 0.4293\nsamples = 3.9%\nvalue = [0.69, 0.31]\nclass = NotHot", fillcolor="#e581398b"] ;
+5 -> 7 ;
+8 [label="length <= 1289.5\ngini = 0.1231\nsamples = 37.6%\nvalue = [0.93, 0.07]\nclass = NotHot", fillcolor="#e58139ed"] ;
+0 -> 8 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+9 [label="w_Sunday <= 0.5\ngini = 0.1523\nsamples = 28.5%\nvalue = [0.92, 0.08]\nclass = NotHot", fillcolor="#e58139e8"] ;
+8 -> 9 ;
+10 [label="gini = 0.1371\nsamples = 25.7%\nvalue = [0.93, 0.07]\nclass = NotHot", fillcolor="#e58139eb"] ;
+9 -> 10 ;
+11 [label="gini = 0.275\nsamples = 2.8%\nvalue = [0.84, 0.16]\nclass = NotHot", fillcolor="#e58139cd"] ;
+9 -> 11 ;
+12 [label="quality <= 600.0\ngini = 0.0235\nsamples = 9.0%\nvalue = [0.99, 0.01]\nclass = NotHot", fillcolor="#e58139fc"] ;
+8 -> 12 ;
+13 [label="gini = 0.0\nsamples = 4.7%\nvalue = [1.0, 0.0]\nclass = NotHot", fillcolor="#e58139ff"] ;
+12 -> 13 ;
+14 [label="gini = 0.0484\nsamples = 4.3%\nvalue = [0.98, 0.02]\nclass = NotHot", fillcolor="#e58139f9"] ;
+12 -> 14 ;
+{rank=same ; 0} ;
+{rank=same ; 1; 8} ;
+{rank=same ; 2; 5; 9; 12} ;
+{rank=same ; 3; 4; 6; 7; 10; 11; 13; 14} ;
+}
