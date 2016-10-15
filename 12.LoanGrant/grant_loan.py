@@ -100,7 +100,7 @@ def train(params):
 
     print "parameters: {}".format(params)
     print "best {}: {:.2f}".format(params["eval_metric"], bst.best_score)
-    print "best_iteration: %d" % (bst.best_iteration)
+    print "best_iteration: %d" % (bst.best_n_trees)
 
     return bst
 
