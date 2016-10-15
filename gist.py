@@ -19,3 +19,20 @@ def validation_roc():
     d = {}
     d['FPR'], d['TPR'], d['Threshold'] = roc_curve(yvalid, yvalid_probas)
     return pd.DataFrame(d)
+
+
+def sort_neighbors(X):
+    Xtrain = X.loc[X.index != 'Missing', :]
+    countries = Xtrain.index
+
+    neigh = NearestNeighbors(n_neighbors=Xtrain.shape[0])  # return all neighbors
+    neigh.fit(Xtrain)
+
+    distance, indices = neigh.kneighbors(X.loc[['Missing'], :])
+
+    distance = distance[0]
+    indices = indices[0]
+    countries = countries[indices]
+
+    return pd.DataFrame(zip(countries, distance), columns=['country', 'distance'])
+
