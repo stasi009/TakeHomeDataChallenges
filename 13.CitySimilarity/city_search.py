@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 from sklearn.preprocessing import normalize
 from sklearn.decomposition import PCA
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier,NearestNeighbors
 
 ############################################# load and clean data
 with open("city_search.json",'rt') as inf:
@@ -76,6 +76,28 @@ country_similarity = pd.DataFrame(country_similarity,
                                   columns=searchcity_by_country.index)
 
 country_similarity['Missing'].sort_values(ascending=False)
+
+
+def sort_neighbors(X):
+    Xtrain = X.loc[X.index != 'Missing', :]
+    countries = Xtrain.index
+
+    neigh = NearestNeighbors(n_neighbors=Xtrain.shape[0])  # return all neighbors
+    neigh.fit(Xtrain)
+
+    distance, indices = neigh.kneighbors(X.loc[['Missing'], :])
+
+    distance = distance[0]
+    indices = indices[0]
+    countries = countries[indices]
+
+    return pd.DataFrame(zip(countries, distance), columns=['country', 'distance'])
+
+def count_hours(df):
+    df.timestamp.dt.hour.value_counts()
+
+hours_by_country = sessions.groupby("user_country").apply(lambda df: df.timestamp.dt.hour.value_counts()).unstack(fill_value=0)
+
 
 ##############
 pca = PCA(n_components=2)
