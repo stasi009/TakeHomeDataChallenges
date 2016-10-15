@@ -33,9 +33,9 @@ def extract_from_counts(df):
     change_rates = cnts_current.values / cnts_prev.values
 
     chg_percentiles = np.percentile(change_rates,qs)
-    for index,q in enumerate(qs):
+    for q,p in itertools.izip(qs,chg_percentiles):
         # 'rch' stands for 'rate of change'
-        d['rch_{}th'.format(q)] = chg_percentiles[index]
+        d['rch_{}th'.format(q)] = p
     d['rch_mean'] = change_rates.mean()
 
     return pd.Series(d)
