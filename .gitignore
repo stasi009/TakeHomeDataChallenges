@@ -108,3 +108,11 @@
 13.CitySimilarity/.ipynb_checkpoints/city_search-checkpoint.ipynb
 
 13.CitySimilarity/most_similar_cities.csv
+
+10.CreditCard/.ipynb_checkpoints/credit_card_fraud-checkpoint.ipynb
+
+10.CreditCard/extend_transactions.csv
+
+10.CreditCard/suspect.csv
+
+10.CreditCard/users_never_exceed_limit.txt
