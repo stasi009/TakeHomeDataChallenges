@@ -34,6 +34,7 @@ def run_ttest(df):
                       'n_ctrl': vp_in_ctrl.shape[0],
                       'mean_test': vp_in_test.mean(),
                       'mean_ctrl': vp_in_ctrl.mean(),
+                      'mean_diff': vp_in_test.mean() - vp_in_ctrl.mean(),
                       'pvalue':result.pvalue,
                       'conclusion':conclusion})
 
@@ -41,6 +42,8 @@ def run_ttest(df):
 tests.groupby('new_user').apply(run_ttest)
 tests.groupby('browser').apply(run_ttest)
 tests.groupby(by=['browser','new_user']).apply(run_ttest)
+
+tests.groupby('test')['browser'].apply(lambda df:df.value_counts(normalize=True))
 
 ##############
 pd.crosstab(tests.new_user,tests.browser,margins=True)
