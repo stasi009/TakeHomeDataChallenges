@@ -1,11 +1,17 @@
 
 import numpy as np
 import pandas as pd
+import scipy.stats as ss
+from sklearn.preprocessing import LabelEncoder
 from sklearn.cross_validation import  train_test_split
-from sklearn.grid_search import  RandomizedSearchCV
 from sklearn.metrics import mean_squared_error,mean_absolute_error,r2_score
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression,RidgeCV
+from sklearn.feature_selection import chi2
+import xgboost as xgb
+
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
 
 hierarchy = pd.read_csv("company_hierarchy.csv",index_col='employee_id')
 hierarchy['level'] = None
@@ -79,21 +85,119 @@ del X['dept_CEO']
 
 X.to_csv("preproc_employees.csv",index_label="employee_id")
 
-###################################################
-def evaluate_model(model,X,y,tag):
-    ypred = model.predict(X)
-    metrics = {}
-    metrics['r2'] = r2_score(y,ypred)
-    metrics['rmse'] = np.sqrt(mean_squared_error(y,ypred))
-    metrics['mabse'] = mean_absolute_error(y,ypred)
-    return pd.Series(metrics,name=tag)
 
 
-y = X['salary']
+# since there is only one CEO, and its salary is the highest
+# either put it into train or test, it will become a outlier
+X = X.loc[X.level !=5,:]
+y = np.log(X['salary'])
 del X['salary']
 
 seed = 999
-Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.333,random_state=seed)
+Xtrain,Xtest,ytrain,ytest = train_test_split(X,y,test_size=0.3,random_state=seed)
+
+train_matrix = xgb.DMatrix(Xtrain,ytrain)
+test_matrix = xgb.DMatrix(Xtest)
+
+params = {}
+params['silent'] = 1
+params['objective'] = 'reg:linear'
+params['eval_metric'] = 'rmse'
+params["num_rounds"] = 300
+params["early_stopping_rounds"] = 30
+# params['min_child_weight'] = 2
+# params['max_depth'] = 6
+params['eta'] = 0.1
+params["subsample"] = 0.8
+params["colsample_bytree"] = 0.8
+
+cv_results = xgb.cv(params,train_matrix,
+                    num_boost_round = params["num_rounds"],
+                    nfold = params.get('nfold',5),
+                    metrics = params['eval_metric'],
+                    early_stopping_rounds = params["early_stopping_rounds"],
+                    verbose_eval = True,
+                    seed = seed)
+
+n_best_trees = cv_results.shape[0]
+
+watchlist = [(train_matrix, 'train')]
+gbt = xgb.train(params, train_matrix, n_best_trees,watchlist)
+
+xgb.plot_importance(gbt)
+
+
+ytest_pred = gbt.predict(test_matrix, ntree_limit=n_best_trees)
+np.sqrt(mean_squared_error(ytest,ytest_pred))
+
+r2_score(ytest,ytest_pred)
+
+########################################
+rfg = RandomForestRegressor(n_estimators=300,oob_score=True,
+                            n_jobs=-1,random_state=seed,verbose=1)
+rfg.fit(Xtrain,ytrain)
+pd.Series(rfg.feature_importances_,index = Xtrain.columns).sort_values(ascending=False)
+
+ytest_pred = rfg.predict(Xtest)
+np.sqrt( mean_squared_error(ytest,ytest_pred) )
+
+(ytest_pred - ytest).hist(bins=100)
+
+###########################################
+
+##### residual analysis to find bias
+whole_matrix = xgb.DMatrix(X)
+ypred = gbt.predict(whole_matrix)
+
+predresult = pd.DataFrame({'ytrue': np.exp(y),'ypred': np.exp(ypred)})
+predresult['bias'] = predresult.ytrue - predresult.ypred
+
+# predresult = X.join(predresult.loc[:,['bias']])
+
+
+predresult = predresult.join(employees)
+del predresult['ytrue']
+
+plt.scatter(predresult.n_subordinates,predresult.bias)
+
+predresult.loc[predresult.sex == 'M','bias'].hist(bins=100,label='Male')
+predresult.loc[predresult.sex == 'F','bias'].hist(bins=100,label='Female')
+
+predresult.groupby('sex')['bias'].agg(np.mean)
+predresult.groupby('dept')['bias'].agg(np.mean)
+predresult.groupby('level')['bias'].agg(np.mean)
+
+
+predresult.groupby( predresult.bias>0).apply(lambda df: df.sex.value_counts(normalize=True))
+
+
+overpay_ismale = ( predresult.loc[predresult.bias > 0,"sex"] == 'M' ).astype(int)
+underpay_ismale = ( predresult.loc[predresult.bias < 0,"sex"] == 'M' ).astype(int)
+
+overpay_ismale.mean()
+underpay_ismale.mean()
+
+ss.ttest_ind(overpay_ismale,underpay_ismale,equal_var=False)
+
+
+predresult_old = predresult.copy()
+del predresult['ypred']
+del predresult['salary']
+
+predresult['degree_level'] = predresult.degree_level.map(degree2index)
+predresult['level'] = predresult.level.map(level2index)
+predresult['is_male'] = (predresult.sex == 'M').astype(int)
+del predresult['sex']
+
+dept_lb_encoder = LabelEncoder()
+predresult['dept'] = dept_lb_encoder.fit_transform(predresult.dept)
+
+scores,pvalues = chi2(predresult.loc[:,predresult.columns != 'bias'],predresult.bias > 0)
+
+
+pd.Series(pvalues,index = predresult.loc[:,predresult.columns != 'bias'].columns)
+
+
 
 param_dist = {"n_estimators": [30,50,100,200],
               "max_depth": [6, 10, 20,None],
