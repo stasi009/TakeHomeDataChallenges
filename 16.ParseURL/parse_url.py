@@ -60,6 +60,9 @@ urls['city'] = urls.city.str.replace('+',' ')
 urls['search_page'] = urls.search_page.astype(int)
 urls.to_csv("urls.csv",index=False)
 
+##
+urls = pd.read_csv('urls.csv')
+
 ###################
 urls.amenities[pd.notnull(urls.amenities)]
 
