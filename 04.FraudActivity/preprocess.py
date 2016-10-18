@@ -30,6 +30,9 @@ class IpLookupTable(object):
 
 iplookuptable = IpLookupTable(ip2country)
 
+minip = ip2country.iloc[0,0]
+maxip = ip2country.iloc[-1,1]
+
 
 # ----------------- signup_time and purchase_time
 def interval_after_signup(s):
@@ -45,10 +48,12 @@ datas.drop(["signup_time", "purchase_time"], axis=1, inplace=True)
 # ----------------- ip to country
 datas["country"] = datas.ip_address.map(iplookuptable.find_country)
 
-# since the data only contains each user's first purchase
-# so all user_id are unique, so if device is shared, then it is shared by different users
-datas["dev_shared"] = datas.device_id.duplicated(keep=False)
-datas["ip_shared"] = datas.ip_address.duplicated(keep=False)
+
+n_dev_used = datas.device_id.value_counts()
+n_ip_used = datas.ip_address.value_counts()
+
+datas["n_dev_used"] = datas.device_id.map(n_dev_used)
+datas['n_ip_used'] = datas.ip_address.map(n_ip_used)
 datas.drop(["ip_address", "device_id"], axis=1, inplace=True)
 
 # reorder the columns

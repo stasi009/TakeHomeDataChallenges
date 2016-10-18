@@ -36,3 +36,36 @@ def sort_neighbors(X):
 
     return pd.DataFrame(zip(countries, distance), columns=['country', 'distance'])
 
+####################################
+params = {}
+params['objective'] = 'binary:logistic'  # output probabilities
+params['eval_metric'] = 'auc'
+params["num_rounds"] = 300
+params["early_stopping_rounds"] = 30
+# params['min_child_weight'] = 2
+params['max_depth'] = 6
+params['eta'] = 0.1
+params["subsample"] = 0.8
+params["colsample_bytree"] = 0.8
+
+cv_results = xgb.cv(params,train_matrix,
+                    num_boost_round = params["num_rounds"],
+                    nfold = params.get('nfold',5),
+                    metrics = params['eval_metric'],
+                    early_stopping_rounds = params["early_stopping_rounds"],
+                    verbose_eval = True,
+                    seed = seed)
+
+watchlist = [(train_matrix, 'train')]
+gbt = xgb.train(params, train_matrix, n_best_trees,watchlist)
+gbt.predict(matrix, ntree_limit=n_best_trees)
+
+xgb.plot_importance(gbt)
+###############################################
+dt = DecisionTreeClassifier(max_depth=3,min_samples_leaf=20,min_samples_split=20)
+dt.fit(X,y)
+export_graphviz(dt,feature_names=X.columns,class_names=['NotFraud','Fraud'],
+                proportion=True,leaves_parallel=True,filled=True)
+
+dot -Tpng tree.dot -o tree.png
+

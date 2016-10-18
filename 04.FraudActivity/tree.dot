@@ -1,0 +1,25 @@
+digraph Tree {
+node [shape=box, style="filled", color="black"] ;
+graph [ranksep=equally, splines=polyline] ;
+0 [label="interval_after_signup <= 69.0\ngini = 0.1698\nsamples = 100.0%\nvalue = [0.91, 0.09]\nclass = NotFraud", fillcolor="#e58139e5"] ;
+1 [label="gini = 0.0\nsamples = 5.0%\nvalue = [0.0, 1.0]\nclass = Fraud", fillcolor="#399de5ff"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="n_dev_shared <= 1.5\ngini = 0.0871\nsamples = 95.0%\nvalue = [0.95, 0.05]\nclass = NotFraud", fillcolor="#e58139f3"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="interval_after_signup <= 8770937.0\ngini = 0.059\nsamples = 87.2%\nvalue = [0.97, 0.03]\nclass = NotFraud", fillcolor="#e58139f7"] ;
+2 -> 3 ;
+4 [label="gini = 0.0579\nsamples = 73.7%\nvalue = [0.97, 0.03]\nclass = NotFraud", fillcolor="#e58139f7"] ;
+3 -> 4 ;
+5 [label="gini = 0.065\nsamples = 13.5%\nvalue = [0.97, 0.03]\nclass = NotFraud", fillcolor="#e58139f6"] ;
+3 -> 5 ;
+6 [label="n_dev_shared <= 4.5\ngini = 0.3394\nsamples = 7.8%\nvalue = [0.78, 0.22]\nclass = NotFraud", fillcolor="#e58139b8"] ;
+2 -> 6 ;
+7 [label="gini = 0.3531\nsamples = 7.2%\nvalue = [0.77, 0.23]\nclass = NotFraud", fillcolor="#e58139b3"] ;
+6 -> 7 ;
+8 [label="gini = 0.0922\nsamples = 0.5%\nvalue = [0.95, 0.05]\nclass = NotFraud", fillcolor="#e58139f2"] ;
+6 -> 8 ;
+{rank=same ; 0} ;
+{rank=same ; 2} ;
+{rank=same ; 3; 6} ;
+{rank=same ; 1; 4; 5; 7; 8} ;
+}
