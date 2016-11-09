@@ -38,6 +38,7 @@ def sort_neighbors(X):
 
 ####################################
 params = {}
+params['silent'] = 1
 params['objective'] = 'binary:logistic'  # output probabilities
 params['eval_metric'] = 'auc'
 params["num_rounds"] = 300
@@ -68,4 +69,3 @@ export_graphviz(dt,feature_names=X.columns,class_names=['NotFraud','Fraud'],
                 proportion=True,leaves_parallel=True,filled=True)
 
 dot -Tpng tree.dot -o tree.png
-
